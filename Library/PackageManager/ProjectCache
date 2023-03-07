@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638133687653917672
-    m_Hash: 371474214
+      ticks: 638134238240149127
+    m_Hash: 321963554
   m_LockFileStatus:
     m_FilePath: C:/Users/luuvi/My project/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638133687654002595
-    m_Hash: 813872167
+      ticks: 638134238240149127
+    m_Hash: 352602927
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -3292,6 +3292,7 @@ m_ResolvedPackages:
     - 9.0.1
     - 10.0.0-pre.1
     - 10.0.0-pre.2
+    - 10.0.0
     compatible:
     - 7.0.9
     verified: 7.0.9
@@ -3518,6 +3519,7 @@ m_ResolvedPackages:
     - 8.0.2
     - 9.0.0-pre.1
     - 9.0.0-pre.2
+    - 9.0.0
     compatible:
     - 6.0.7
     verified: 6.0.7
@@ -3727,6 +3729,7 @@ m_ResolvedPackages:
     - 9.0.1
     - 10.0.0-pre.1
     - 10.0.0-pre.2
+    - 10.0.0
     compatible:
     - 7.0.6
     verified: 7.0.6
@@ -3901,6 +3904,7 @@ m_ResolvedPackages:
     - 3.0.3
     - 4.0.0-pre.1
     - 4.0.0-pre.2
+    - 4.0.0-pre.3
     compatible:
     - 2.2.4
     verified: 2.2.4
@@ -4085,6 +4089,7 @@ m_ResolvedPackages:
     - 8.0.1
     - 9.0.0-pre.1
     - 9.0.0-pre.2
+    - 9.0.0
     compatible:
     - 6.0.6
     verified: 6.0.6

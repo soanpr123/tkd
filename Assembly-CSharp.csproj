@@ -36,11 +36,14 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\backGroundController.cs" />
+     <Compile Include="Assets\scripts\WrapAroundCollider.cs" />
      <Compile Include="Assets\scripts\MapLoader.cs" />
+     <Compile Include="Assets\scripts\PlayerMove.cs" />
      <Compile Include="Assets\scripts\Background.cs" />
      <Compile Include="Assets\scripts\GameSRC.cs" />
-     <Compile Include="Assets\scripts\PlayerMove.cs" />
-     <Compile Include="Assets\scripts\WrapAroundCollider.cs" />
+     <Compile Include="Assets\BgEfff.cs" />
+     <Compile Include="Assets\scripts\cameramove.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.19f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -776,8 +779,14 @@
     <Reference Include="Unity.2D.IK.Runtime">
         <HintPath>C:\Users\luuvi\My project\Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Cinemachine">
+        <HintPath>C:\Users\luuvi\My project\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst">
         <HintPath>C:\Users\luuvi\My project\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+        <HintPath>C:\Users\luuvi\My project\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Shared.Editor">
         <HintPath>C:\Users\luuvi\My project\Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
@@ -808,12 +817,6 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
         <HintPath>C:\Users\luuvi\My project\Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.cinemachine.editor">
-        <HintPath>C:\Users\luuvi\My project\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Cinemachine">
-        <HintPath>C:\Users\luuvi\My project\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

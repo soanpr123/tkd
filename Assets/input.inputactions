@@ -266,7 +266,7 @@
                 {
                     "name": "",
                     "id": "bd0eabc4-bf8f-4c83-a237-9c1ee8dfb571",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",

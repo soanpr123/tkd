@@ -2,21 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class PlayerMove : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] float runSpeed;
-    [SerializeField] float jumSpeed;
+    [SerializeField] float jumpSpeed;
+    [SerializeField] float maxJumpHeight;
+    [SerializeField] float timeToMaxHeight;
+    [SerializeField] float gravityScale;
+    [SerializeField] float descendSpeed;
     Vector2 moveInput;
     Rigidbody2D mrigidbody2D;
-    BoxCollider2D mBox;
+    public float maxJum;
+    bool isJumping = false;
+
     void Start()
     {
         mrigidbody2D = GetComponent<Rigidbody2D>();
-        mBox = GetComponent<BoxCollider2D>();
+        mrigidbody2D.gravityScale = gravityScale;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Run();
@@ -26,24 +31,49 @@ public class PlayerMove : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-        Debug.Log(moveInput);
     }
+
     void OnJum(InputValue value)
     {
-        if (!mBox.IsTouchingLayers(LayerMask.GetMask("Ground")))
-        {
-            return;
-        }
         if (value.isPressed)
         {
-            mrigidbody2D.velocity += new Vector2(0f, jumSpeed);
+            if (mrigidbody2D.velocity.y < maxJum)
+            {
+                mrigidbody2D.velocity += new Vector2(mrigidbody2D.velocity.x, jumpSpeed);
+            }
+            else
+            {
+                mrigidbody2D.velocity += new Vector2(mrigidbody2D.velocity.x, mrigidbody2D.velocity.y);
+            }
+        }
+
+    }
+
+    IEnumerator JumpCoroutine()
+    {
+        float timer = 0f;
+        while (isJumping && timer < timeToMaxHeight)
+        {
+            float normalizedTime = timer / timeToMaxHeight;
+            float jumpVelocity = Mathf.Lerp(0f, maxJumpHeight, normalizedTime);
+            mrigidbody2D.velocity = new Vector2(mrigidbody2D.velocity.x, jumpVelocity);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        while (isJumping)
+        {
+            mrigidbody2D.velocity = new Vector2(mrigidbody2D.velocity.x, -descendSpeed);
+            yield return null;
         }
     }
+
     void Run()
     {
         Vector2 playerMove = new Vector2(moveInput.x * runSpeed, mrigidbody2D.velocity.y);
         mrigidbody2D.velocity = playerMove;
     }
+
     void FlipPlayer()
     {
         bool playerHasHor = Mathf.Abs(mrigidbody2D.velocity.x) > Mathf.Epsilon;
@@ -51,6 +81,5 @@ public class PlayerMove : MonoBehaviour
         {
             transform.localScale = new Vector2(Mathf.Sign(mrigidbody2D.velocity.x), 1f);
         }
-
     }
 }
