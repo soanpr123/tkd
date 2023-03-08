@@ -28,13 +28,17 @@ public class MapLoader : MonoBehaviour
     private GameObject playerObj;
     private CinemachineVirtualCamera virtualCamera;
     private GameObject camm;
+    float mapWidth ;
+    float mapHeight;
+    Vector3 mapCenter;
     // private Vector2 tileSize;
-    // Start is called before the first frame update
+    // Start is called b    efore the first frame update
+    private CinemachineConfiner cinemachineConfiner;
     void Start()
     {
         camm = GameObject.Find("playerCam");
         virtualCamera = camm.GetComponent<CinemachineVirtualCamera>();
-
+        cinemachineConfiner = camm.GetComponent<CinemachineConfiner>();
         StartCoroutine(LoadMap());
     }
 
@@ -54,9 +58,9 @@ public class MapLoader : MonoBehaviour
             MapData mapData = JsonUtility.FromJson<MapData>(json);
 
             Vector2 tileSize = terrainPrefab.GetComponent<BoxCollider2D>().size;
-            float mapWidth = mapData.column * tileSize.x;
-            float mapHeight = mapData.row * tileSize.y;
-            Vector3 mapCenter = new Vector3(mapWidth / 2, -mapHeight / 2, 0);
+             mapWidth = mapData.column * tileSize.x;
+             mapHeight = mapData.row * tileSize.y;
+             mapCenter = new Vector3(mapWidth / 2, -mapHeight / 2, 0);
             Vector3 mapTopRight = new Vector3(mapWidth, 0, 0) + mapCenter;
             float maxMapHeight = mapTopRight.y;
             List<Vector2> points = new List<Vector2>();
@@ -64,8 +68,8 @@ public class MapLoader : MonoBehaviour
             points.Add(new Vector2(0, -mapHeight));
             points.Add(new Vector2(mapWidth, -mapHeight));
             points.Add(new Vector2(mapWidth, 0));
-            barrierObj.GetComponent<PolygonCollider2D>().points = points.ToArray();
-            barrierObj.GetComponent<PolygonCollider2D>().transform.position = mapCenter;
+           
+ 
 
 
             // Thêm confiner vào virtual camera
@@ -102,22 +106,13 @@ public class MapLoader : MonoBehaviour
                 playerObj = Instantiate(Player, new Vector2(10, 0), Quaternion.identity);
 
                 map.transform.position = mapCenter;
+                barrierObj.GetComponent<PolygonCollider2D>().points = points.ToArray();
+                barrierObj.GetComponent<PolygonCollider2D>().transform.position = mapCenter;
                 Player.GetComponent<PlayerMove>().maxJum = barrierObj.GetComponent<PolygonCollider2D>().bounds.size.y / 2;
                 virtualCamera.Follow = playerObj.transform;
-                CinemachineConfiner confiner = virtualCamera.gameObject.AddComponent<CinemachineConfiner>();
-                // confiner.m_ConfineMode = CinemachineConfiner.Mode.Confine2D;
+                cinemachineConfiner.m_BoundingShape2D =  obj.GetComponent<Collider2D>();
+                
 
-                // confiner.m_BoundingShape2D = barrierObj.GetComponent<PolygonCollider2D>();
-
-                // confiner.m_ConfineMode = CinemachineConfiner.Mode.Confine2D;
-                // virtualCamera.AddExtension(confiner);
-
-
-
-
-                // Cấu hình confiner theo nhu cầu của bạn
-
-                // map.transform.position = new Vector3(mapData.column / 2.9f, -mapData.row / 3.3f, 0);
             }
             else
             {
@@ -126,18 +121,10 @@ public class MapLoader : MonoBehaviour
             bg1 = new GameObject("bg0");
 
             bg1.AddComponent<SpriteRenderer>();
-
+           
             if (File.Exists(imagebg))
             {
-                // byte[] imageData1 = File.ReadAllBytes(imagebg);
-                // texture = new Texture2D(2, 2);
-                // texture.LoadImage(imageData1);
-                // bg1.GetComponent<SpriteRenderer>().sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                // bg1.AddComponent<backGroundController>().backGroundH = mapHeight / 6;
-                // bg1.transform.SetParent(transform);
-                // bg1.transform.position = mapCenter;
-                // bg1.GetComponent<SpriteRenderer>().sprite.texture.wrapMode = TextureWrapMode.Repeat;
-                // bg1.GetComponent<SpriteRenderer>().drawMode = SpriteDrawMode.Tiled;
+               
 
                 GameObject bgmap = new GameObject("mapBgr");
 
@@ -145,8 +132,8 @@ public class MapLoader : MonoBehaviour
                 texture = new Texture2D(2, 2);
                 texture.LoadImage(imageData1);
                 bg1.GetComponent<SpriteRenderer>().sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                bg1.AddComponent<BgEfff>().speed = maxMapHeight;
-                bg1.AddComponent<BgEfff>().maxMove = barrierObj.GetComponent<PolygonCollider2D>().bounds.size.y / 2;
+                bg1.AddComponent<BgEfff>().speed =bg1.GetComponent<SpriteRenderer>().size.y/2.5f;
+                //bg1.AddComponent<BgEfff>().maxMove = barrierObj.GetComponent<PolygonCollider2D>().bounds.size.y / 2;
                 bg1.transform.SetParent(bgmap.transform);
                 bg1.transform.position = mapCenter;
                 bg1.GetComponent<SpriteRenderer>().sprite.texture.wrapMode = TextureWrapMode.Repeat;
@@ -154,7 +141,7 @@ public class MapLoader : MonoBehaviour
                 bg1.GetComponent<SpriteRenderer>().tileMode = SpriteTileMode.Continuous;
                 bg1.GetComponent<SpriteRenderer>().size = new Vector2(mapWidth, bg1.GetComponent<SpriteRenderer>().size.y);
                 // for (int i = 1; i < mapData.imgBgrs.Count; i++)
-                // {
+                // {   
                 bgi = new GameObject("bg" + 1);
 
                 bgi.AddComponent<SpriteRenderer>();
@@ -187,15 +174,28 @@ public class MapLoader : MonoBehaviour
     }
     void Update()
     {
-        // Transform objTransform = virtualCamera.transform;
-        // PolygonCollider2D collider = barrierObj.GetComponent<PolygonCollider2D>();
-        // Vector2 objPosition = objTransform.position;
+        if (playerObj != null)
+        {
+            Debug.Log(playerObj.transform.position);
+            if (playerObj.transform.position.x < 0 || playerObj.transform.position.x > mapWidth)
+            {
+                // Nếu nhân vật đang nằm ngoài map thì đặt lại vị trí của nó ở biên giới hạn của map
+                playerObj.transform.position = new Vector3(Mathf.Clamp(playerObj.transform.position.x+(Player.GetComponent<SpriteRenderer>().bounds.size.x / 2), 0, mapWidth), playerObj.transform.position.y, playerObj.transform.position.z);
+            }
 
-        // float clampedX = Mathf.Clamp(objPosition.x, collider.bounds.min.x, collider.bounds.max.x);
-        // float clampedY = Mathf.Clamp(objPosition.y, collider.bounds.min.y, collider.bounds.max.y);
+            // Kiểm tra vị trí y của nhân vật có nằm trong giới hạn của map không
+            if (playerObj.transform.position.y > 0 || playerObj.transform.position.y < -mapHeight)
+            {
+                // Nếu nhân vật đang nằm ngoài map thì đặt lại vị trí của nó ở biên giới hạn của map
+                playerObj.transform.position = new Vector3(playerObj.transform.position.x, Mathf.Clamp(playerObj.transform.position.y+((Player.GetComponent<SpriteRenderer>().bounds.size.y / 2)), -mapHeight, 0), playerObj.transform.position.z);
+            }
+        }
+    }
 
-        // objTransform.position = new Vector3(clampedX, clampedY, objTransform.position.z);
-        // bg1.transform.position = virtualCamera.transform.position;
+
+    void createGameObject()
+    {
+
     }
 
     [System.Serializable]

@@ -37,18 +37,18 @@ public class PlayerMove : MonoBehaviour
     {
         if (value.isPressed)
         {
-            if (mrigidbody2D.velocity.y < maxJum)
-            {
+            
                 mrigidbody2D.velocity += new Vector2(mrigidbody2D.velocity.x, jumpSpeed);
-            }
-            else
-            {
-                mrigidbody2D.velocity += new Vector2(mrigidbody2D.velocity.x, mrigidbody2D.velocity.y);
-            }
+            
         }
 
     }
 
+    void OnFly(InputValue value)
+    {
+        mrigidbody2D.velocity += new Vector2(mrigidbody2D.velocity.x, jumpSpeed);
+        Debug.Log(value);
+    }
     IEnumerator JumpCoroutine()
     {
         float timer = 0f;
